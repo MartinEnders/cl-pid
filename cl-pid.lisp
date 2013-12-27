@@ -17,6 +17,11 @@
    (set-point :initarg :set-point :initform 0 :accessor set-point)
    (fault :initarg :fault :initform 0 :accessor fault)))
 
+(defmethod print-object ((object pid) stream)
+  (print-unreadable-object (object stream :type t)
+    (with-slots (kp ki kd derivator integrator integrator-max integrator-min set-point fault) object
+      (format stream "kp: ~s, ki: ~s, kd: ~s, derivator: ~s, integrator: ~s, integrator-max: ~s, integrator-min: ~s, set-point: ~s, fault: ~s" kp ki kd derivator integrator integrator-max integrator-min set-point fault))))
+
 (defgeneric update (pid current-value)
   (:documentation "Update funktion fuer PID-Controller Object"))
 
@@ -39,6 +44,7 @@
 
     (setf i-value (* (integrator pid) (ki pid)))
 
+    (print pid)
     (+ p-value i-value d-value)))
     
   
