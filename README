@@ -2,4 +2,6 @@ CL-PID
 
 Simple Implementation of a PID Controller in Common Lisp
 
+Currently the intergater-max and integrator-min slots of the PID-Object are ignored by the PID-Controller implementation.
+
 
