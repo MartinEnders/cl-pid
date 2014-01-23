@@ -4,4 +4,9 @@ Simple Implementation of a PID Controller in Common Lisp
 
 Currently the intergater-max and integrator-min slots of the PID-Object are ignored by the PID-Controller implementation.
 
+;;; Usage: 
+;;;         (in-package :cl-pid)
+;;;         (defparameter *easy-pid* (make-instance 'pid :set-point 60)) ; set-point is the target value
+;;;         (update *easy-pid* [current-value]) ; update returns the output of the PID-Controller
+
 

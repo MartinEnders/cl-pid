@@ -4,6 +4,18 @@
 
 ;;; "cl-pid" goes here. Hacks and glory await!
 
+
+;;;
+;;; Class definition
+;;; Class pid is the central PID Controller class
+;;; pid is subclassed for each implementation of pid-controller
+;;; 
+;;; Usage: 
+;;;         (in-package :cl-pid)
+;;;         (defparameter *easy-pid* (make-instance 'pid :set-point 60)) ; set-point is the target value
+;;;         (update *easy-pid* [current-value]) ; update returns the output of the PID-Controller
+;;;
+
 (defclass pid ()
   ((kp :initarg :kp :initform 2 :accessor kp :documentation "Proportional gain, tuning parameter")
    (ki :initarg :ki :initform 1 :accessor ki :documentation "Integral gain, tuning parameter")
@@ -30,7 +42,14 @@ fault: ~s
 " kp ki kd derivator integrator integrator-max integrator-min set-point fault))))
 
 (defgeneric update (pid current-value)
-  (:documentation "Update funktion fuer PID-Controller Object"))
+  (:documentation "Update function for PID-Controller Object"))
+
+
+
+;;;
+;;; Easy PID-Controller
+;;;
+
 
 (defmethod update ((pid pid) current-value)
   "Current Version ignores integrator-max and integrator-min"
@@ -56,7 +75,16 @@ fault: ~s
 
       (+ p-value i-value d-value))))
 
-    
+;;;
+;;; Type A PID-Controller (reimplementation of the code on http://www.vandelogt.nl/htm/regelen_pid_uk.htm)
+;;;
+
+;;; TODO (-:
+
+
+;;;
+;;; Here is some code to play with a PID-Controller
+;;;    
 
 ;; Code for Testpurposes:
 
@@ -75,7 +103,7 @@ fault: ~s
 				   (* (- ct) energy-loss)))))
 
 (defun run-simulation (&optional (simulation-loops 10))
-  ;; Init the environment
+  "Easy simulation of heating a bowl of water."
   (setf *current-temperature* 20)
   (pid-init)
   (let ((pid-output nil)
@@ -88,12 +116,6 @@ fault: ~s
       (push (list pid-output *current-temperature*) results))
     (format t "~%~%~{~{~20A~}~%~}~%" (reverse results))))
       
-  
-  
-  
-	  
-	
- 
 (defun pid-init ()
   (setf *pid-controller* (make-instance 'pid :set-point 60 :kd 0.01 :kp 2 :ki 1)))
 
